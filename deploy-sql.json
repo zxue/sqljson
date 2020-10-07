@@ -92,8 +92,8 @@
             ]
         },
         "additionalFhirServerConfigProperties": {
-            "type": "string",
-            "defaultValue": "",
+            "type": "object",
+            "defaultValue": {},
             "metadata": {
                 "description": "Additional configuration properties for the FHIR server. In the form {\"path1\":\"value1\",\"path2\":\"value2\"}"
             }
@@ -113,7 +113,7 @@
         },
         "sqlLocation": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "An override location for the sql server database."
             }
