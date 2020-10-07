@@ -106,7 +106,7 @@
             }
         },
         "sqlAdminPassword": {
-            "type": "securestring",
+            "type": "string",
             "metadata": {
                 "description": "The password for the sql admin user if using SQL server."
             }
