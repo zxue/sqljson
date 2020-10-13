@@ -125,19 +125,19 @@
             "name": "[variables('hostingPlanName')]",
             "tags": {
                 "FhirServerSolution": "[parameters('solutionType')]"
-            },
+                    },
             "location": "[variables('location')]",
             "properties": {
                 "name": "[variables('hostingPlanName')]",
                 "computeMode": "Dynamic",
+                            },
                 "sku":{  
                     "name":"Y1",
                     "tier":"Dynamic",
                     "size":"Y1",
                     "family":"Y",
                     "capacity":0
-                }
-            }
+                    }
         },
         {
             "apiVersion": "2018-11-01",
