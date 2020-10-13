@@ -81,7 +81,7 @@
                 {
                   "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                   "apiVersion": "2019-06-01",
-                  "name": "[concat(variables('storageAccountName'),'/default/fhirimport')]",
+                  "name": "default/fhirimport",
                   "dependsOn": [
                     "[variables('storageAccountName')]"
                   ],
@@ -92,7 +92,7 @@
                 {
                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                     "apiVersion": "2019-06-01",
-                    "name": "[concat(variables('storageAccountName'),'/default/fhirrejected')]",
+                    "name": "default/fhirrejected",
                     "dependsOn": [
                       "[variables('storageAccountName')]"
                     ],
