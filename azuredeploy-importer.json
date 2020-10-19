@@ -94,13 +94,20 @@
                 "description": "The resource group of fhir api or oss server."
             }
         },
-            "roleDefinitionId": {
+            "builtInRoleType": {
             "type": "string",
-            "defaultValue": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+            "allowedValues": [
+                "Owner",
+                "Contributor",
+                "Reader",
+                "FHIRDataContributor",
+                "FHIRDataWriter",
+                "FHIRDataReader"
+            ],
             "metadata": {
-                "description": "roleDefinition for the assignment - default is contributor"
+                "description": "Built-in role to assign"
             }
-            }
+        }
         },
     "variables": {
         "location": "[resourceGroup().location]",
@@ -109,6 +116,9 @@
         "applicationInsightsName": "[parameters('appNameImporter')]",
         "storageAccountName": "[replace(concat(toLower(parameters('appNameImporter')), 'sa'),'-','')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "Owner": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')]",
+        "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+        "Reader": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]",
         "scopeProvider": "[if(equals(parameters('fhirPaaSorOSS'),'OSS'),'/providers/Microsoft.Web/sites/','/providers/Microsoft.HealthcareApis/services/')]"
     },
     "resources": [
@@ -284,15 +294,15 @@
                 }
     },
     {
-            "type": "Microsoft.Authorization/roleAssignments",
+            "type": "Microsoft.Web/sites/providers/roleAssignments",
             "apiVersion": "2018-09-01-preview",
             "name": "[guid(resourceGroup().id)]",
             "properties": {
-                "roleDefinitionId": "[parameters('roleDefinitionId')]",
+                "roleDefinitionId": "[variables(parameters('builtInRoleType'))]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]",
                 "scope": "[concat('/subscriptions/', parameters('fhirSubscription'), '/resourceGroups/', parameters('fhirResourceGroup'), variables('scopeProvider'), parameters('fhirServiceName'))]"
             }
-        }
+    }
 
     ]
 }
