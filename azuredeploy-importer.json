@@ -119,6 +119,9 @@
         "Owner": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')]",
         "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
         "Reader": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]",
+        "FHIRDataContributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '5a1fc7df-4bf1-4951-a576-89034ee01acd')]",
+        "FHIRDataWriter": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '3f88fce4-5892-4214-ae73-ba5294559913')]",
+        "FHIRDataReader": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4c8d0bbc-75d3-4935-991f-5f3c56d81508')]",
         "scopeProvider": "[if(equals(parameters('fhirPaaSorOSS'),'OSS'),'/providers/Microsoft.Web/sites/','/providers/Microsoft.HealthcareApis/services/')]"
     },
     "resources": [
@@ -294,8 +297,8 @@
                 }
     },
     {
-            "type": "Microsoft.Web/sites/providers/roleAssignments",
-            "apiVersion": "2018-09-01-preview",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
             "name": "[guid(resourceGroup().id)]",
             "properties": {
                 "roleDefinitionId": "[variables(parameters('builtInRoleType'))]",
