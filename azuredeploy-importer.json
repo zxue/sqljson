@@ -14,7 +14,6 @@
                 "description": "fhir service url, api or oss server"
             }
         },
-        
         "storageAccountType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
@@ -68,8 +67,15 @@
             "metadata": {
                 "description": "The type of the solution"
             }
+        },
+            "fhirSubscription": {
+            "type": "string",
+            "defaultValue": "[subscription().id]",
+            "metadata": {
+                "description": "The subscription id of fhir api or oss server. Specify if it is in different subscription"
+            }
         }
-    },
+        },
     "variables": {
         "location": "[resourceGroup().location]",
         "functionAppName": "[parameters('appNameImporter')]",
@@ -255,7 +261,7 @@
             "apiVersion": "2018-09-01-preview",
             "name": "[guid(resourceGroup().id)]",
             "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', guid(subscription().id, reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId))]",
+                "roleDefinitionId": "[concat('/subscriptions/', parameters('fhirSubscription'), '/providers/Microsoft.Authorization/roleDefinitions/', guid(parameters('fhirSubscription'), reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId))]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]"
             }
         }
