@@ -208,6 +208,10 @@
                             "value": "1"
                         },
                         {
+                            "name": "FhirServerUrl",
+                            "value": "[parameters('fhirServiceUrl')]"
+                        },
+                        {
                             "name": "MaxDegreeOfParallelism",
                             "value": "16"
                         }
@@ -245,6 +249,16 @@
                 "publicNetworkAccessForIngestion": "Enabled",
                 "publicNetworkAccessForQuery": "Enabled"
                 }
-    }
+    },
+    {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2018-09-01-preview",
+            "name": "[guid(resourceGroup().id)]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', guid(subscription().id, reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId))]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]"
+            }
+        }
+
     ]
 }
