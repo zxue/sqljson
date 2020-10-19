@@ -14,6 +14,18 @@
                 "description": "fhir service url, api or oss server"
             }
         },
+        "fhirServiceName": {
+            "type": "string",
+            "metadata": {
+                "description": "fhir service name"
+            }
+        },
+        "fhirPaaSorOSS": {
+            "type": "string",
+            "metadata": {
+                "description": "fhir service name"
+            }
+        },
         "storageAccountType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
@@ -74,7 +86,21 @@
             "metadata": {
                 "description": "The subscription id of fhir api or oss server. Specify if it is in different subscription"
             }
-        }
+        },
+            "fhirResourceGroup": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]",
+            "metadata": {
+                "description": "The resource group of fhir api or oss server."
+            }
+        },
+            "roleDefinitionId": {
+            "type": "string",
+            "defaultValue": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+            "metadata": {
+                "description": "roleDefinition for the assignment - default is contributor"
+            }
+            }
         },
     "variables": {
         "location": "[resourceGroup().location]",
@@ -82,7 +108,8 @@
         "hostingPlanName": "[parameters('appNameImporter')]",
         "applicationInsightsName": "[parameters('appNameImporter')]",
         "storageAccountName": "[replace(concat(toLower(parameters('appNameImporter')), 'sa'),'-','')]",
-        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "scopeProvider": "[if(equals(parameters('fhirPaaSorOSS'),'OSS'),'/providers/Microsoft.Web/sites/','/providers/Microsoft.HealthcareApis/services/')]"
     },
     "resources": [
         {
@@ -261,8 +288,9 @@
             "apiVersion": "2018-09-01-preview",
             "name": "[guid(resourceGroup().id)]",
             "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', parameters('fhirSubscription'), '/providers/Microsoft.Authorization/roleDefinitions/', guid(parameters('fhirSubscription'), reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId))]",
-                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]"
+                "roleDefinitionId": "[parameters('roleDefinitionId')]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]",
+                "scope": "[concat('/subscriptions/', parameters('fhirSubscription'), '/resourceGroups/', parameters('fhirResourceGroup'), variables('scopeProvider'), parameters('fhirServiceName'))]"
             }
         }
 
