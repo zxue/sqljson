@@ -70,7 +70,7 @@
         },
             "fhirSubscription": {
             "type": "string",
-            "defaultValue": "[subscription().id]",
+            "defaultValue": "[subscription().subscriptionid]",
             "metadata": {
                 "description": "The subscription id of fhir api or oss server. Specify if it is in different subscription"
             }
