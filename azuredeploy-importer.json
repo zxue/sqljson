@@ -299,11 +299,14 @@
     {
             "type": "Microsoft.Web/sites/providers/roleAssignments",
             "apiVersion": "2020-04-01-preview",
-            "name": "[concat(parameters('fhirServiceName'), '/', '/Microsoft.Authorization/', guid(resourceGroup().id, parameters('fhirServiceName'), variables(parameters('builtInRoleType'))))]",
+            "name": "[concat('/subscriptions/', parameters('fhirSubscription'), '/resourceGroups/', parameters('fhirResourceGroup'), '/', parameters('fhirServiceName'), '/Microsoft.Authorization/', guid(resourceGroup().id, parameters('fhirServiceName'), variables(parameters('builtInRoleType'))))]",
+            "dependsOn": [
+                "[concat('/subscriptions/', parameters('fhirSubscription'), '/resourceGroups/', parameters('fhirResourceGroup'), '/', parameters('fhirServiceName'))]"
+            ],
             "properties": {
                 "roleDefinitionId": "[variables(parameters('builtInRoleType'))]",
                 "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]",
-                "scope": "[concat('/subscriptions/', parameters('fhirSubscription'), '/resourcegroups/', parameters('fhirResourceGroup'), variables('scopeProvider'), parameters('fhirServiceName'))]"
+                "scope": "[concat('/subscriptions/', parameters('fhirSubscription'), '/resourceGroups/', parameters('fhirResourceGroup'), variables('scopeProvider'), parameters('fhirServiceName'))]"
             }
     }
 
