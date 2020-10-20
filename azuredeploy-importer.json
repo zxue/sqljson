@@ -110,6 +110,7 @@
         }
         },
     "variables": {
+        "sampleVersion": "1.0.0.0",
         "location": "[resourceGroup().location]",
         "functionAppName": "[parameters('appNameImporter')]",
         "hostingPlanName": "[parameters('appNameImporter')]",
@@ -299,21 +300,76 @@
                 "publicNetworkAccessForQuery": "Enabled"
                 }
         },
-        {
 
-            "type": "Microsoft.Web/sites/providers/roleAssignments",
-            "apiVersion": "2020-04-01-preview",
-            "name": "[concat(parameters('fhirServiceName'), '/Microsoft.Authorization/', guid(resourceId('Microsoft.Web/sites', parameters('fhirServiceName')), variables('roleDefinitionId')))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+
+
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-05-01",
+      "name": "nestedTemplate1",
+      "resourceGroup": "[parameters('fhirResourceGroup')]",
+      "dependsOn": [
+        "[concat('Microsoft.Web/manasites/', parameters('fhirServiceName'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+          "expressionEvaluationOptions": {
+            "scope": "inner"
+        },
+        "parameters": {
+            "pname": {
+            "value": "[concat(parameters('fhirServiceName'), '/Microsoft.Authorization/', guid(resourceId('Microsoft.Web/sites', parameters('fhirServiceName')), variables('roleDefinitionId')))]"
+          },
+                      "pdependson": {
+            "value": "[resourceId('Microsoft.Web/sites', parameters('fhirServiceName'))]"
+          },
+                      "proleDefinitionId": {
+            "value": "[variables('roleDefinitionId')]"
+          },
+                      "pprincipalId": {
+            "value": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {
+                    "pname": {"type": "string"},
+                    "pdependson": {"type": "string"},
+                    "proleDefinitionId": {"type": "string"},
+                    "pprincipalId": {"type": "string"}
+          },
+          "variables": {},
+          "resources": [
+                    {
+                        "type": "Microsoft.Web/sites/providers/roleAssignments",
+                        "apiVersion": "2020-04-01-preview",
+                        "name": "[parameters('pname')]",
+                        "dependsOn": [
+                            "[parameters('pdependson')]"
+                        ],
+                        "properties": {
+                            "roleDefinitionId": "[parameters('proleDefinitionId')]",
+                            "principalId": "[parameters('pprincipalId')]",
+                            "principalType": "ServicePrincipal"
+                        }
+                    }
             ],
-            "properties": {
-                "roleDefinitionId": "[variables('roleDefinitionId')]",
-                "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2018-02-01', 'Full').identity.principalId]",
-                "principalType": "ServicePrincipal"
-            }
+          "outputs": {}
         }
+      }
+    }
 
 
-    ]
+    ],
+    "outputs": {
+    "rolevalue": {
+      "type": "string",
+      "value": "[variables('roleDefinitionId')]"
+    },
+        "rolename": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/sites', parameters('fhirServiceName'))]"
+    }
+  }
 }
