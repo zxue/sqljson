@@ -309,7 +309,7 @@
       "name": "nestedTemplate1",
       "resourceGroup": "[parameters('fhirResourceGroup')]",
       "dependsOn": [
-        "[concat('Microsoft.Web/manasites/', parameters('fhirServiceName'))]"
+        "[concat('Microsoft.Web/sites/', parameters('fhirServiceName'))]"
       ],
       "properties": {
         "mode": "Incremental",
