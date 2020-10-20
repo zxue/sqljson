@@ -303,9 +303,9 @@
 
             "type": "Microsoft.Web/sites/providers/roleAssignments",
             "apiVersion": "2020-04-01-preview",
-            "name": "[concat(parameters('fhirServiceName'), '/Microsoft.Authorization/', guid(resourceId('Microsoft.Web/sites/', parameters('fhirServiceName')), variables('roleDefinitionId')))]",
+            "name": "[concat(resourceId('Microsoft.Web/sites',parameters('fhirServiceName')), '/Microsoft.Authorization/', guid(resourceId('Microsoft.Web/sites/', parameters('fhirServiceName')), variables('roleDefinitionId')))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/', parameters('fhirServiceName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
             "properties": {
                 "roleDefinitionId": "[variables('roleDefinitionId')]",
