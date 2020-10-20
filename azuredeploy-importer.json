@@ -14,18 +14,6 @@
                 "description": "fhir service url, api or oss server"
             }
         },
-        "fhirServiceName": {
-            "type": "string",
-            "metadata": {
-                "description": "fhir service name"
-            }
-        },
-        "fhirPaaSorOSS": {
-            "type": "string",
-            "metadata": {
-                "description": "fhir service name"
-            }
-        },
         "storageAccountType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
@@ -79,55 +67,16 @@
             "metadata": {
                 "description": "The type of the solution"
             }
-        },
-            "fhirSubscription": {
-            "type": "string",
-            "defaultValue": "[subscription().subscriptionid]",
-            "metadata": {
-                "description": "The subscription id of fhir api or oss server. Specify if it is in different subscription"
-            }
-        },
-            "fhirResourceGroup": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().name]",
-            "metadata": {
-                "description": "The resource group of fhir api or oss server."
-            }
-        },
-            "builtInRoleType": {
-            "type": "string",
-            "allowedValues": [
-                "Owner",
-                "Contributor",
-                "Reader",
-                "FHIRDataContributor",
-                "FHIRDataWriter",
-                "FHIRDataReader"
-            ],
-            "metadata": {
-                "description": "Built-in role to assign"
-            }
         }
         },
     "variables": {
-        "sampleVersion": "1.0.0.0",
         "location": "[resourceGroup().location]",
         "functionAppName": "[parameters('appNameImporter')]",
         "hostingPlanName": "[parameters('appNameImporter')]",
         "applicationInsightsName": "[parameters('appNameImporter')]",
         "storageAccountName": "[replace(concat(toLower(parameters('appNameImporter')), 'sa'),'-','')]",
-        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "roleGuids": {
-            "Owner": "8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
-            "Contributor": "b24988ac-6180-42a0-ab88-20f7382dd24c",
-            "Reader": "acdd72a7-3385-48ef-bd42-f606fba81ae7",
-            "FHIRDataContributor": "5a1fc7df-4bf1-4951-a576-89034ee01acd",
-            "FHIRDataWriter": "3f88fce4-5892-4214-ae73-ba5294559913",
-            "FHIRDataReader": "4c8d0bbc-75d3-4935-991f-5f3c56d81508"
-        },
-        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('roleGuids')[parameters('builtInRoleType')])]",
-        "scopeProvider": "[if(equals(parameters('fhirPaaSorOSS'),'OSS'),'/providers/Microsoft.Web/sites/','/providers/Microsoft.HealthcareApis/services/')]"
-    },
+        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+},
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
