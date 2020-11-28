@@ -30,14 +30,14 @@
             "type": "string",
             "defaultValue": "fhirimport",
             "metadata": {
-                "description": "The name of the storage container."
+                "description": "The name of the storage container for source data."
             }
         },
                 "containerNameRejected": {
             "type": "string",
             "defaultValue": "fhirrejected",
             "metadata": {
-                "description": "The name of the storage container."
+                "description": "The name of the storage container for data rejected."
             }
         },
         "repositoryUrl": {
@@ -74,7 +74,7 @@
         "functionAppName": "[parameters('appNameImporter')]",
         "hostingPlanName": "[parameters('appNameImporter')]",
         "applicationInsightsName": "[parameters('appNameImporter')]",
-        "storageAccountName": "[replace(concat(toLower(parameters('appNameImporter')), 'sa'),'-','')]",
+        "storageAccountName": "[replace(concat(toLower(substring(parameters('appNameImporter'), 0, 22)), 'sa'),'-','')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
 },
     "resources": [
