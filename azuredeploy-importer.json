@@ -67,6 +67,25 @@
             "metadata": {
                 "description": "The type of the solution"
             }
+        },
+        "aadAuthority": {
+            "type": "string",
+            "defaultValue": "https://login.microsoftonline.com/common",
+            "metadata": {
+                "description": "OAuth Authority"
+            }
+        },
+        "aadServiceClientId": {
+            "type": "string",
+            "metadata": {
+                "description": "AAD service client application id"
+            }
+        },
+        "aadServiceClientSecret": {
+            "type": "string",
+            "metadata": {
+                "description": "AAD service client secret"
+            }
         }
         },
     "variables": {
@@ -197,6 +216,22 @@
                         {
                             "name": "APPINSIGHTS_SNAPSHOTFEATURE_VERSION",
                             "value": "1.0.0"
+                        },
+                                                {
+                            "name": "ClientId",
+                            "value": "[parameters('aadServiceClientId')]"
+                        },
+                        {
+                            "name": "ClientSecret",
+                            "value": "[parameters('aadServiceClientSecret')]"
+                        },
+                        {
+                            "name": "Audience",
+                            "value": "[parameters('fhirServiceUrl')]"
+                        },
+                        {
+                            "name": "Authority",
+                            "value": "[parameters('aadAuthority')]"
                         },
                         {
                             "name": "PROJECT",
