@@ -70,7 +70,7 @@
         },
         "aadAuthority": {
             "type": "string",
-            "defaultValue": "https://login.microsoftonline.com/common",
+            "defaultValue": "https://login.microsoftonline.com",
             "metadata": {
                 "description": "OAuth Authority"
             }
@@ -231,7 +231,7 @@
                         },
                         {
                             "name": "Authority",
-                            "value": "[parameters('aadAuthority')]"
+                            "value": "[concat(parameters('aadAuthority'),'/', subscription().tenantId)]"
                         },
                         {
                             "name": "PROJECT",
