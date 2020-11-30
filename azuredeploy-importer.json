@@ -93,7 +93,7 @@
         "functionAppName": "[parameters('appNameImporter')]",
         "hostingPlanName": "[parameters('appNameImporter')]",
         "applicationInsightsName": "[parameters('appNameImporter')]",
-        "storageAccountName": "[replace(concat(toLower(substring(parameters('appNameImporter'), 0, 22)), 'sa'),'-','')]",
+        "storageAccountName": "[replace(concat(toLower(substring(parameters('appNameImporter'), 0, min(length(parameters('appNameImporter')), 22))), 'sa'),'-','')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
 },
     "resources": [
